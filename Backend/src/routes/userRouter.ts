@@ -2,6 +2,7 @@
 import express,{ Request, Response } from "express";
 import { User } from "../DB";
 import { Types } from "mongoose";
+import bcrypt from "bcrypt";
 const userRouter = express.Router();
 
 
@@ -20,10 +21,11 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
       message: "User Already Exixts, Please Signin"
     })
   }
+  const hashedPassword = await bcrypt.hash(password,5)
   const userId = new Types.ObjectId();
   const user = await User.create({
     userName,
-    password,
+    password: hashedPassword,
     userId
   })
 
