@@ -148,6 +148,39 @@ userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>
   
 })
 
+// get content 
+userRouter.get("/fetchcontent/:userId", async(req:Request, res:Response): Promise<any> =>{
+  try {
+    const {userId} = req.params
+    if(!userId){
+      return res.status(400).json({
+        message: "All Fields Are Mandatory",
+        status: 400
+      })
+    }
+
+    const searchUser = await Content.find({userId});
+  
+    if(!searchUser){
+      return res.status(400).json({
+        message: "User Not Found",
+        status: 400
+      })
+    }
+    console.log(searchUser)
+    return res.status(200).json({
+      message: "User Content Fetched Successfully",
+      status: 200,
+      searchUser
+    })
+  } catch (error: any) {
+    console.error("Error while Fetching Content:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+})
 // create tag
 userRouter.post("/createtag", async(req: Request, res: Response): Promise<any>=>{
   try {
@@ -176,6 +209,4 @@ userRouter.post("/createtag", async(req: Request, res: Response): Promise<any>=>
     });
   }
 })
-
-
 export { userRouter };
