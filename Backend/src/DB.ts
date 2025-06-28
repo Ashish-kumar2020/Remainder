@@ -4,7 +4,8 @@ import { IUser,ITag,IContent } from "./Types";
 
 const userSchema = new Schema<IUser>({
   userName: { type: String, unique: true, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  userId: {type: mongoose.Types.ObjectId,required: true}
 });
 
 const tagSchema = new Schema<ITag>({

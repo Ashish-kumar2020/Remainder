@@ -1,8 +1,9 @@
-import mongoose from "mongoose"
+import mongoose, { ObjectId } from "mongoose"
 
 export interface IUser{
     userName: string,
-    password: string
+    password: string,
+    userId: ObjectId
 }
 
 export interface ITag{

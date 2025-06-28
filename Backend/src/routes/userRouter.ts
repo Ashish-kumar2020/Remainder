@@ -1,6 +1,6 @@
 
 import express,{ Request, Response } from "express";
-import { User } from "../DB";
+import { Content, User } from "../DB";
 import { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
@@ -37,6 +37,7 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
       password: hashedPassword,
       userId,
     });
+  
 
     return res.status(201).json({
       message: "User account created successfully",
@@ -99,5 +100,48 @@ userRouter.post("/signin", async(req: Request, res: Response): Promise<any> =>{
  
 
 })
+
+
+// Post the content
+userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>{
+  try {
+    const {link,type,title,tags,userId} = req.body;
+    if(!link || !type || !title || !tags ||!userId){
+      return res.status(400).json({
+        message: "All Fields Are Mandatory",
+        status: 400
+      })
+    }
+    // search for user
+    const searchUser = await User.findOne(userId);
+    if(!searchUser){
+      return res.status(400).json({
+        message: "No User Found with these credentials",
+        status: 400
+      })
+    }
+    const userContent = await Content.create({
+      link,
+      type,
+      title,
+      tags,
+      userId
+    })
+    return res.status(200).json({
+      message: "Content Created Successfully",
+      status: 200,
+      userContent
+    })
+
+  } catch (error: any) {
+    console.error("Error while Posting Content:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+  
+})
+
 
 export { userRouter };
