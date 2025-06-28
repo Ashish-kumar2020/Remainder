@@ -7,7 +7,8 @@ export interface IUser{
 }
 
 export interface ITag{
-    title: string
+    title: string,
+    tagId: ObjectId
 }
 
 export interface IContent{

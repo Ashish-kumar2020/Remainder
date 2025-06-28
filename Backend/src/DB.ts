@@ -9,7 +9,8 @@ const userSchema = new Schema<IUser>({
 });
 
 const tagSchema = new Schema<ITag>({
-  title: { type: String, required: true, unique: true }
+  title: { type: String, required: true, unique: true },
+  tagId: {type: mongoose.Types.ObjectId, required: true}
 });
 
 const contentTypes = ['image', 'video', 'article', 'audio'] as const;

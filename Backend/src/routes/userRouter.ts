@@ -1,6 +1,6 @@
 
 import express,{ Request, Response } from "express";
-import { Content, User } from "../DB";
+import { Content, Tag, User } from "../DB";
 import { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
@@ -113,20 +113,25 @@ userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>
       })
     }
     // search for user
-    const searchUser = await User.findOne(userId);
+    const searchUser = await User.findOne({_id: userId});
     if(!searchUser){
       return res.status(400).json({
         message: "No User Found with these credentials",
         status: 400
       })
     }
-    const userContent = await Content.create({
+    console.log(searchUser)
+    const createdContent = await Content.create({
       link,
       type,
       title,
       tags,
       userId
     })
+    const userContent = await createdContent.populate([
+      {path: "userId", select:"userName"},
+      {path: "tags",select: "title"} 
+    ])
     return res.status(200).json({
       message: "Content Created Successfully",
       status: 200,
@@ -141,6 +146,35 @@ userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>
     });
   }
   
+})
+
+// create tag
+userRouter.post("/createtag", async(req: Request, res: Response): Promise<any>=>{
+  try {
+    const {title} = req.body;
+    if(!title){
+      return res.status(400).json({
+        message: "All Fields Are Mandatory",
+        status: 400
+      })
+    }
+    const tagId = new Types.ObjectId();
+    const tags = await Tag.create({
+      title,
+      tagId
+    })
+    return res.status(200).json({
+      message: "Tag Created Successfully",
+      tags,
+      status: 200
+    })
+  } catch (error: any) {
+    console.error("Error while Creating Tag:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
 })
 
 
