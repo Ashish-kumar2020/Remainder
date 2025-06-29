@@ -5,7 +5,7 @@ import mongoose, { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
 import config from "../config";
-import { generateHash, random } from "../utils";
+import {  random } from "../utils";
 const userRouter = express.Router();
 
 
@@ -285,7 +285,7 @@ userRouter.post("/sharelink", async (req: Request, res: Response): Promise<any> 
         });
       }
 
-      const hash = generateHash(20);
+      const hash = random(20);
       const shareableLink = await Links.create({
         userId,
         hash,
