@@ -273,20 +273,25 @@ userRouter.post("/sharelink", async(req:Request, res: Response): Promise<any>=>{
     })
   }
   if(share){
-    await Links.create({
+    let shareableLink = await Links.create({
       userId: userId,
-      hash: random(10)
+      hash: random(20)
+    })
+    return res.status(200).json({
+      message: "Link Generated",
+      status: 200,
+      shareableLink
     })
   } else{
     await Links.deleteOne({
       userId: userId
     })
+    return res.status(200).json({
+      message: "Link Deleted",
+      status: 200,
+     
+    })
   }
-  return res.status(200).json({
-    message: "Link Generated",
-    status: 200,
-    
-  })
 })
 
 
