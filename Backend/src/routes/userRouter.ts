@@ -1,10 +1,11 @@
 
 import express,{ Request, Response } from "express";
-import { Content, Tag, User } from "../DB";
+import { Content, Links, Tag, User } from "../DB";
 import mongoose, { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
 import config from "../config";
+import { random } from "../utils";
 const userRouter = express.Router();
 
 
@@ -260,4 +261,33 @@ userRouter.delete("/deletecontent", async(req:Request, res:Response):Promise<any
     });
   }
 })
+
+
+// generate a shareable link
+userRouter.post("/sharelink", async(req:Request, res: Response): Promise<any>=>{
+  const {share,userId} = req.body;
+  if(!userId){
+    return res.status(400).json({
+      message: "All Fileds Are Mandatory",
+      status: 400
+    })
+  }
+  if(share){
+    await Links.create({
+      userId: userId,
+      hash: random(10)
+    })
+  } else{
+    await Links.deleteOne({
+      userId: userId
+    })
+  }
+  return res.status(200).json({
+    message: "Link Generated",
+    status: 200,
+    
+  })
+})
+
+
 export { userRouter };

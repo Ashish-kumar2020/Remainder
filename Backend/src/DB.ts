@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { IUser,ITag,IContent } from "./Types";
+import { IUser,ITag,IContent, ILink } from "./Types";
 
 
 const userSchema = new Schema<IUser>({
@@ -25,8 +25,13 @@ const contentSchema = new Schema<IContent>({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
+const LinkSchema = new Schema<ILink>({
+  hash: {type: String, required: true},
+  userId: {type: Schema.Types.ObjectId, ref: "User", required: true , unique: true}
+})
+
 const Tag = mongoose.model('Tag', tagSchema);
 const User = mongoose.model('User', userSchema);
 const Content = mongoose.model('Content', contentSchema);
-
-export { Tag, User, Content };
+const Links = mongoose.model("Links",LinkSchema)
+export { Tag, User, Content,Links };

@@ -20,3 +20,8 @@ export interface IContent{
     tags: mongoose.Types.ObjectId,
     userId: mongoose.Types.ObjectId
 }
+
+export interface ILink{
+    hash: string,
+    userId: mongoose.Types.ObjectId
+}
