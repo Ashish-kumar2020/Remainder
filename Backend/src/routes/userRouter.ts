@@ -12,9 +12,9 @@ const userRouter = express.Router();
 // Sign up endpoint
 userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { userName, password } = req.body;
+    const { userName, password, firstName,lastName } = req.body;
 
-    if (!userName || !password) {
+    if (!userName || !password || !firstName || !lastName) {
       return res.status(400).json({
         message: "All fields are mandatory",
         status: 400
@@ -36,6 +36,8 @@ userRouter.post("/signup", async (req: Request, res: Response): Promise<any> => 
       userName,
       password: hashedPassword,
       userId,
+      firstName,
+      lastName
     });
   
 
@@ -120,7 +122,7 @@ userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>
         status: 400
       })
     }
-    console.log(searchUser)
+
     const createdContent = await Content.create({
       link,
       type,
@@ -159,7 +161,9 @@ userRouter.get("/fetchcontent/:userId", async(req:Request, res:Response): Promis
       })
     }
 
-    const searchUser = await Content.find({userId});
+    const searchUser = await Content.find({userId}) 
+    .populate({ path: "userId", select: "firstName" })
+    .populate({ path: "tags", select: "title" });;
   
     if(!searchUser){
       return res.status(400).json({
@@ -167,7 +171,8 @@ userRouter.get("/fetchcontent/:userId", async(req:Request, res:Response): Promis
         status: 400
       })
     }
-    console.log(searchUser)
+    
+    
     return res.status(200).json({
       message: "User Content Fetched Successfully",
       status: 200,

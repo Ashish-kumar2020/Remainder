@@ -3,7 +3,9 @@ import mongoose, { ObjectId } from "mongoose"
 export interface IUser{
     userName: string,
     password: string,
-    userId: ObjectId
+    userId: ObjectId,
+    firstName: string,
+    lastName: string
 }
 
 export interface ITag{
