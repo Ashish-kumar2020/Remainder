@@ -5,7 +5,7 @@ import mongoose, { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
 import config from "../config";
-import { random } from "../utils";
+import { generateHash, random } from "../utils";
 const userRouter = express.Router();
 
 
@@ -264,36 +264,54 @@ userRouter.delete("/deletecontent", async(req:Request, res:Response):Promise<any
 
 
 // generate a shareable link
-userRouter.post("/sharelink", async(req:Request, res: Response): Promise<any>=>{
-  const {share,userId} = req.body;
-  if(!userId){
-    return res.status(400).json({
-      message: "All Fileds Are Mandatory",
-      status: 400
-    })
-  }
-  if(share){
-    let shareableLink = await Links.create({
-      userId: userId,
-      hash: random(20)
-    })
-    return res.status(200).json({
-      message: "Link Generated",
-      status: 200,
-      shareableLink
-    })
-  } else{
-    await Links.deleteOne({
-      userId: userId
-    })
-    return res.status(200).json({
-      message: "Link Deleted",
-      status: 200,
-     
-    })
-  }
-})
+userRouter.post("/sharelink", async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { share, userId } = req.body;
 
+    if (!userId) {
+      return res.status(400).json({
+        message: "All Fields Are Mandatory",
+        status: 400,
+      });
+    }
+
+    if (share) {
+      let existing = await Links.findOne({ userId });
+      if (existing) {
+        return res.status(200).json({
+          message: "Link already exists",
+          status: 200,
+          shareableLink: existing,
+        });
+      }
+
+      const hash = generateHash(20);
+      const shareableLink = await Links.create({
+        userId,
+        hash,
+      });
+
+      return res.status(200).json({
+        message: "Link Generated",
+        status: 200,
+        shareableLink,
+      });
+    } else {
+      const deleteResult = await Links.deleteOne({ userId });
+
+      return res.status(200).json({
+        message: deleteResult.deletedCount > 0 ? "Link Deleted" : "No Link to Delete",
+        status: 200,
+      });
+    }
+  } catch (error: any) {
+    console.error("Error generating/deleting share link:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
 
 // send content based on link
 userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promise<any> => {
