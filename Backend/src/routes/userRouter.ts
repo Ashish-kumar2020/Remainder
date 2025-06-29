@@ -1,7 +1,7 @@
 
 import express,{ Request, Response } from "express";
 import { Content, Tag, User } from "../DB";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; 
 import config from "../config";
@@ -208,6 +208,52 @@ userRouter.post("/createtag", async(req: Request, res: Response): Promise<any>=>
     })
   } catch (error: any) {
     console.error("Error while Creating Tag:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+})
+
+
+// delete content
+userRouter.delete("/deletecontent", async(req:Request, res:Response):Promise<any> =>{
+  try {
+    const {contentId,userId} = req.body;
+    if(!contentId || !userId){
+      return res.status(400).json({
+        message: "All Fileds are mandatory",
+        status: 400
+      })
+    }
+
+    const searchContent = await Content.deleteOne({_id: new mongoose.Types.ObjectId(contentId)});
+    if(searchContent.deletedCount === 0){
+      return res.status(400).json({
+        message: "Content does not exists or already deleted",
+        status: 400
+      })
+    }
+    const searchUser = await Content.find({ userId })
+    .populate({ path: "userId", select: "firstName" })
+    .populate({ path: "tags", select: "title" });
+
+    if(!searchUser){
+      return res.status(400).json({
+        message: "User Not Found",
+        status: 400
+      })
+    }
+    
+    
+    return res.status(200).json({
+      message: "Content Deleted Successfully",
+      status: 200,
+      searchUser
+    })
+    
+  } catch (error: any) {
+    console.error("Error while deleting content:", error);
     return res.status(500).json({
       message: "Internal Server Error",
       error: error.message,
