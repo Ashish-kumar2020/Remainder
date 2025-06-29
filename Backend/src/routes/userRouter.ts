@@ -294,27 +294,35 @@ userRouter.post("/sharelink", async(req:Request, res: Response): Promise<any>=>{
   }
 })
 
-// send content based on link
-userRouter.get("/senddetails/:link", async(req:Request,res: Response):Promise<any>=>{
-  const hash = req.params.link;
-  const link = await Links.findOne({
-    hash
-  })
-  if(!link){
-    return res.status(400).json({
-      message: "Sorry Incorrect Link or Link Expired",
-      status: 400
-    })
-  }
 
-  const sharedContent = await Content.find({
-    userId: link.userId
-  })
-  return res.status(200).json({
-    message: "All Contents of the users",
-    status: 200,
-    sharedContent
-  })
-})
+// send content based on link
+userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promise<any> => {
+  try {
+    const hash = req.params.link;
+    const link = await Links.findOne({ hash });
+    if (!link) {
+      return res.status(400).json({
+        message: "Sorry, incorrect link or link expired",
+        status: 400
+      });
+    }
+    const sharedContent = await Content.find({ userId: link.userId })
+      .populate({ path: "tags", select: "title" }) 
+      .populate({ path: "userId", select: "firstName" }); 
+
+    return res.status(200).json({
+      message: "All contents of the user",
+      status: 200,
+      sharedContent
+    });
+  } catch (error: any) {
+    console.error("Error fetching shared content:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+});
+
 
 export { userRouter };
