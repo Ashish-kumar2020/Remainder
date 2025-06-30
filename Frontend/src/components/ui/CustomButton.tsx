@@ -1,81 +1,56 @@
 import classNames from "classnames";
 
-interface CustomButtonProps{
-  text: string;
-  onClick : () => void;
-  variant?: "primary" | "secondary" | "danger";
-  size: "sm" | "md" | "lg";
-  disabled?: boolean;
-  loading?: boolean;
-  icon?: React.ReactNode;
-  fullWidth?: boolean;
-  rounded?: boolean;
-  tooltip?: string;
-
-  bgColor?: string;
-  textColor?: string;
-  hoverColor?: string;
+interface CustomButtonProps {
+    text: string;
+    onClick: ()=> void;
+    variant : "primary" | "secondary" | "danger";
+    size : "xs" |"sm" | "md" | "lg";
+    loading?: boolean;
+    icon: React.ReactNode;
+    disabled?: boolean
+   
 }
 
-const CustomButton = (props: CustomButtonProps) => {
-  const {
-    text,
-    onClick,
-    variant = "primary",
-    size = "md",
-    disabled = false,
-    loading = false,
-    icon,
-    fullWidth = false,
-    rounded = false,
-    tooltip,
-    bgColor,
-    textColor,
-    hoverColor,
-  } = props;
-  const baseStyle = "flex items-center justify-center font-semibold focus:outline-none transition-transform duration-150 ease-in-out transform hover:scale-105";
+const CustomButton = (props: CustomButtonProps)=>{
+    const {text,onClick, variant="primary" , size="md", loading = false, icon,disabled= false } = props;
+    const variantStyles = {
+        primary:
+          "bg-primaryBlue text-white hover:bg-primaryBlueHover focus:ring-primaryFocusRing",
+        secondary:
+          "bg-white text-primaryBlue border border-primaryBlue hover:bg-primaryBlue hover:text-white focus:ring-primaryFocusRing",
+        danger:
+          "bg-dangerRed text-white hover:bg-dangerRedHover focus:ring-dangerFocusRing",
+      };
 
-  const variantStyles = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary : "bg-gray-300 text-gray-800 hover:bg-gray-400",
-    danger: "bg-red-500 text-white hover:bg-red-600"
-  }
+      const sizeStyles = {
+        xs: "px-1 py-1 text-xs",
+        sm: "px-3 py-1.5 text-sm",
+        md: "px-5 py-2.5 text-sm",
+        lg: "px-6 py-3 text-base",
+      };
 
-  const sizeStyles = {
-    sm : "px-3 py-1 text-sm",
-    md: "px-4 py-2 text-base",
-    lg: "px-5 py-3 text-lg"
-  }
+      const baseStyles ="font-medium rounded-customRadiusPrimaryLg focus:outline-none focus:ring-4 me-2 mb-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
-  const customStyles = `${bgColor || ""} ${textColor || ""} ${hoverColor ? `hover:${hoverColor}`: ""}`;
-  return (
-   <button onClick={onClick}
-      disabled={disabled || loading}
-      title={tooltip}
-      className={classNames(
-        baseStyle,
-        !bgColor ? variantStyles[variant] : "",
-        sizeStyles[size],
-        customStyles,
-        {
-          "w-full": fullWidth,
-          "opacity-50 cursor-not-allowed": disabled || loading,
-          "rounded-full": rounded,
-          "rounded-md": !rounded,
-        }
-      )} 
-   
-   >
-    {loading ? (
-        <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
-      ) : (
-        <>
-          {icon && <span className="mr-2">{icon}</span>}
-          {text}
-        </>
-      )}
-   </button>
-  )
+      return(
+        <button 
+            onClick={onClick}
+            className={classNames(
+                baseStyles,
+               variantStyles[variant],
+               sizeStyles[size]
+            )}
+            disabled={disabled || loading}
+        >
+        {loading ? (
+                <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
+            ) : (
+                <>
+                {icon && <span>{icon}</span>}
+                <span>{text}</span>
+                </>
+            )}
+        </button>
+      )
 }
 
 export default CustomButton
