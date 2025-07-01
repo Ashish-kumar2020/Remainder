@@ -4,7 +4,13 @@ import {  Lock, User, ArrowLeft } from "lucide-react";
 
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import type { AxiosResponse } from "axios";
 
+
+interface ApiResponse {
+  status: number;
+  message?: string;
+}
 interface SignUpPayload{
     userName: string
     password: string
@@ -20,7 +26,7 @@ const Signup = () => {
         lastName: ""
     })
 
-    const signupMutation = useMutation<SignUpPayload>({
+    const signupMutation = useMutation<AxiosResponse<ApiResponse>, unknown, SignUpPayload>({
         mutationFn: (userData) =>{
             return axios.post(import.meta.env.VITE_API_URL_USER_SIGNUP, userData)
         },
