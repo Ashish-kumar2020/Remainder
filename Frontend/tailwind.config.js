@@ -12,7 +12,8 @@ export default {
         primaryFocusRing: "#93c5fd",
         dangerRed: "#b91c1c",
         dangerRedHover: "#991b1b",
-        dangerFocusRing: "#f87171"
+        dangerFocusRing: "#f87171",
+        primary: "rgb(17 24 39)",
       },
       borderRadius: {
         customRadiusPrimaryLg: '8px',

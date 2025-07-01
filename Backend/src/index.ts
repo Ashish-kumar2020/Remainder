@@ -3,13 +3,20 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import config from "./config";
 import { userRouter } from "./routes/userRouter";
-
+import cors from "cors"
 dotenv.config();
 
 const app = express();
 const PORT_NUMBER = config.PORT_NUMBER;
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow this specific origin
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization", "token"], // Allowed headers
+  })
+);
 app.use("/api/v1/user", userRouter); 
 
 mongoose.connection.on("connected", () => {
