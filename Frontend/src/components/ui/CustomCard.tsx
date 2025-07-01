@@ -32,7 +32,7 @@ const CustomCard = (props: CustomCardComponet) => {
         </div>
       ) : (
         <img
-          className="rounded-t-lg object-cover w-full h-[200px]"
+          className="rounded-t-lg object-cover w-full aspect-[4/3] "
           src={imageURL}
           alt={title}
         />
