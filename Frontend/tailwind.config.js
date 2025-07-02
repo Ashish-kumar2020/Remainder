@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     extend: {
+      darkMode: 'class',
       colors: {
         primaryBlue: '#1d4ed8',
         primaryBlueHover: "#1e40af",
