@@ -316,34 +316,135 @@ userRouter.post("/sharelink", async (req: Request, res: Response): Promise<any> 
 });
 
 // send content based on link
+// userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promise<any> => {
+//   try {
+//     const hash = req.params.link;
+    
+//     const link = await Content.findOne({ link: hash })
+//     .populate({ path: "tags", select: "title" })
+//     .populate({ path: "userId", select: "firstName" });
+//     if (!link) {
+//       return res.status(400).json({
+//         message: "Sorry, incorrect link or link expired",
+//         status: 400
+//       });
+//     }
+//     const sharedContent = await Content.find({ userId: link.userId })
+//       .populate({ path: "tags", select: "title" }) 
+//       .populate({ path: "userId", select: "firstName" }); 
+
+//     return res.status(200).json({
+//       message: "All contents of the user",
+//       status: 200,
+//       link
+//     });
+//   } catch (error: any) {
+//     console.error("Error fetching shared content:", error);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//       error: error.message
+//     });
+//   }
+// });
 userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promise<any> => {
   try {
     const hash = req.params.link;
-    
-    const link = await Content.findOne({ link: hash })
-    .populate({ path: "tags", select: "title" })
-    .populate({ path: "userId", select: "firstName" });
-    if (!link) {
-      return res.status(400).json({
-        message: "Sorry, incorrect link or link expired",
-        status: 400
-      });
-    }
-    const sharedContent = await Content.find({ userId: link.userId })
-      .populate({ path: "tags", select: "title" }) 
-      .populate({ path: "userId", select: "firstName" }); 
 
-    return res.status(200).json({
-      message: "All contents of the user",
-      status: 200,
-      link
-    });
-  } catch (error: any) {
-    console.error("Error fetching shared content:", error);
-    return res.status(500).json({
-      message: "Internal server error",
-      error: error.message
-    });
+    const content = await Content.findOne({ link: hash })
+    .populate("tags", "title")
+    .populate("userId", "firstName"); 
+
+    if (!content) {
+      return res.status(404).send("<h2>Link not found or expired</h2>");
+    }
+    const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>${content.title}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f4f6;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+          }
+          .card {
+            background-color: #fff;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+          }
+          .card h1 {
+            font-size: 1.8rem;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+          }
+          .card p.description {
+            font-size: 0.95rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+          }
+          .tags {
+            margin-bottom: 1rem;
+          }
+          .tags span {
+            display: inline-block;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            margin: 3px;
+            border-radius: 6px;
+          }
+          .uploader {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+          }
+          .image-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+            padding: 8px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>${content.title}</h1>
+          <p class="description">${content.description}</p>
+
+          <div class="tags">
+          ${
+            Array.isArray(content.tags)
+              ? content.tags.map((tag: any) => `<span>${tag.title}</span>`).join("")
+              : ""
+          }
+        </div>
+        <div>
+        Uploaded By - ${typeof content.userId === 'object' && 'firstName' in content.userId ? content.userId.firstName : 'Unknown'}
+      </div>
+      
+        </div>
+      </body>
+      </html>
+    `;
+
+    // res.send(html);
+    res.send(html)
+  } catch (err) {
+    console.error("Error rendering card:", err);
+    res.status(500).send("<h2>Internal Server Error</h2>");
   }
 });
 
