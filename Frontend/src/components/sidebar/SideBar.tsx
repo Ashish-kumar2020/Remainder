@@ -4,10 +4,9 @@ import { useNavigate } from "react-router-dom";
 const SideBar = () => {
   const [active, setActive] = useState("Home");
   const items = [
-    { name: "Home", path: "/homepage" },
+    { name: "Image", path: "/homepage" },
     { name: "Youtube", path: "/homepage/youtubecontent" },
-    { name: "Image", path: "/image" },
-    { name: "Tweet", path: "/tweet" },
+    { name: "Tweet", path: "/homepage/tweet" },
   ];
 
   const navigate = useNavigate()
