@@ -319,7 +319,12 @@ userRouter.post("/sharelink", async (req: Request, res: Response): Promise<any> 
 userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promise<any> => {
   try {
     const hash = req.params.link;
-    const link = await Links.findOne({ hash });
+    
+    const link = await Content.findOne({ link: hash })
+    .populate({ path: "tags", select: "title" })
+    .populate({ path: "userId", select: "firstName" });
+
+    console.log(link," Hash ", hash)
     if (!link) {
       return res.status(400).json({
         message: "Sorry, incorrect link or link expired",
@@ -333,7 +338,7 @@ userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promis
     return res.status(200).json({
       message: "All contents of the user",
       status: 200,
-      sharedContent
+      link
     });
   } catch (error: any) {
     console.error("Error fetching shared content:", error);
