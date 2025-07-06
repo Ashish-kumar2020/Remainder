@@ -1,11 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchContent } from "../../slice/fetchAllContent";
+import { fetchContent, type ContentItem } from "../../slice/fetchAllContent";
 import type { AppDispatch ,RootState} from "../../store";
 import { useSelector } from "react-redux";
+import ContentCard from "../Pages/ContentCard";
 
 
 const HomeContent = () => {
+  //  "Youtube", "Image", "Tweet"
+  // const {youtubeContent,setYoutubeContent} = useState();
+  const [imageContent, setImageContent] = useState<ContentItem[]>([]);
+  // const {tweetContent,setTweetContent} = useState()
+
   const dispatch = useDispatch<AppDispatch>(); 
   const { data, isLoading, isError } = useSelector(
     (state: RootState) => state.fetchContent
@@ -17,19 +23,31 @@ const HomeContent = () => {
     }
   }, [dispatch]);
 
-  if(isLoading){
-    return <p>Content is beign loading...Please wait</p>
-  }
+  
+  useEffect(() => {
+    if (data?.searchUser) {
+      const filtered = data.searchUser.filter(
+        (category) => category.type === "image"
+        );
+        setImageContent(filtered);
+      }
+    }, [data]);
+    
+    
+    if(isLoading){
+      return <p>Content is beign loading...Please wait</p>
+    }
+  
+    if(isError){
+      return <p>There is some error while fetching the content</p>
+    }
 
-  if(isError){
-    return <p>There is some error while fetching the content</p>
-  }
-
-  if(data){
-    console.log(data)
-  }
   return (
-    <div className="bg-white dark:bg-gray-900">HomeContent</div>
+    <div className="bg-white dark:bg-gray-900 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 mt-[70px]">
+    {imageContent.map((item) => (
+      <ContentCard key={item._id} item={item} />
+    ))}
+  </div>
   );
 };
 

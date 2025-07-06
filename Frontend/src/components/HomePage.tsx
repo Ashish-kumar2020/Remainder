@@ -7,8 +7,11 @@ const HomePage = () => {
   return (
     <div className="bg-white dark:bg-gray-900">
       <Navbar/>
-      <Outlet/>
+      <div className="flex">
       <SideBar/>
+      <Outlet/>
+
+      </div>
     </div>
   )
 }

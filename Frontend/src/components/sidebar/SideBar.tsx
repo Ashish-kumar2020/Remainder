@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const SideBar = () => {
   const [active, setActive] = useState("Home");
-  const items = ["Home", "Youtube", "Docs", "Tweet"];
+  const items = ["Home", "Youtube", "Image", "Tweet"];
 
   return (
     <div className="bg-white dark:bg-gray-900 w-[20%] shadow-lg h-[100vh] p-[22px]">
