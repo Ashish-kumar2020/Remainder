@@ -3,7 +3,8 @@ import './App.css'
 import HomePage from './components/HomePage'
 import Signin from './components/signin/Signin'
 import Signup from './components/signup/Signup'
-import HomeContent from './components/HomeContent/HomeContent'
+import HomeContent from './components/Content/HomeContent'
+import YoutubeContent from './components/Content/YoutubeContent'
 
 function App() {
   
@@ -23,6 +24,10 @@ function App() {
         {
           index: true,
           element: <HomeContent/>
+        },
+        {
+          path: "youtubecontent",
+          element: <YoutubeContent/>
         }
       ]
     }

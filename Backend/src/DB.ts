@@ -15,7 +15,7 @@ const tagSchema = new Schema<ITag>({
   tagId: {type: mongoose.Types.ObjectId, required: true}
 });
 
-const contentTypes = ['image', 'video', 'article', 'audio'] as const;
+const contentTypes = ['image', 'youtube', 'article', 'audio'] as const;
 
 const contentSchema = new Schema<IContent>({
   link: { type: String, required: true },

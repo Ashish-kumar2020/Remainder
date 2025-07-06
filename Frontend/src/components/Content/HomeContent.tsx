@@ -7,10 +7,7 @@ import ContentCard from "../Pages/ContentCard";
 
 
 const HomeContent = () => {
-  //  "Youtube", "Image", "Tweet"
-  // const {youtubeContent,setYoutubeContent} = useState();
   const [imageContent, setImageContent] = useState<ContentItem[]>([]);
-  // const {tweetContent,setTweetContent} = useState()
 
   const dispatch = useDispatch<AppDispatch>(); 
   const { data, isLoading, isError } = useSelector(

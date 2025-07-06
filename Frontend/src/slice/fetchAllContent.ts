@@ -20,6 +20,7 @@ export interface Tag {
     tags: Tag[];
     userId: User;
     __v: number;
+    description: string;
   }
 
   export interface FetchUserContentResponse {

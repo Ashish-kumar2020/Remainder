@@ -21,11 +21,11 @@ type ContentItem = {
   description: string;
 };
 
-interface ContentCardProps {
+interface YoutubeCardProps {
   item: ContentItem;
 }
 
-const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
+const YoutubeCard: React.FC<YoutubeCardProps> = ({ item }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async (textToCopy: string) => {
@@ -38,14 +38,34 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
       console.error("Failed to copy text: ", err);
     }
   };
+  console.log("Youtube COmponent")
 
+
+  const youtubeURL = item.link;
+ function convertURLToEmbedURL(youtubeUrl: string): string{
+    try {
+        const url = new URL(youtubeURL);
+        const videoId = url.searchParams.get("v");
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : youtubeUrl;
+    } catch (error) {
+        console.log("Error while converting the url")
+        return youtubeUrl;
+    }
+ }
+
+ const embededURL = convertURLToEmbedURL(youtubeURL)
   return (
     <div className="w-[350px] flex flex-col justify-between bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 p-4 max-w-md h-full">
-      <img
-        src={`data:image/png;base64,${item.link}`}
-        alt={item.title}
-        className="w-full h-64 object-contain mb-4 bg-gray-100 rounded"
-      />
+     
+     <div className="aspect-w-16 aspect-h-9 mb-4">
+        <iframe
+            src={embededURL}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="w-full h-full"
+        ></iframe>
+    </div>
 
       <div className="flex justify-between items-start mb-2">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white">
@@ -84,4 +104,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
   );
 };
 
-export default ContentCard;
+export default YoutubeCard;
+
+
+// <iframe width="560" height="315" src="https://www.youtube.com/embed/1q9FwhadyZo?si=VdcIfPRfX_4arm0i" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
