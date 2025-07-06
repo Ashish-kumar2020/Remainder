@@ -30,7 +30,6 @@ const ContentCard: React.FC<ContentCardProps> = ({ item }) => {
 
   const handleCopy = async (textToCopy: string) => {
     try {
-      const userID = localStorage.getItem("userID")
       await navigator.clipboard.writeText(import.meta.env.VITE_API_URL_FETCH_CONTENT_USING_URL + textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);

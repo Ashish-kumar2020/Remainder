@@ -323,8 +323,6 @@ userRouter.get("/senddetails/:link", async (req: Request, res: Response): Promis
     const link = await Content.findOne({ link: hash })
     .populate({ path: "tags", select: "title" })
     .populate({ path: "userId", select: "firstName" });
-
-    console.log(link," Hash ", hash)
     if (!link) {
       return res.status(400).json({
         message: "Sorry, incorrect link or link expired",
