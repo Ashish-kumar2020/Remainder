@@ -11,8 +11,10 @@ const HomeContent = () => {
     (state: RootState) => state.fetchContent
   );
   useEffect(() => {
-    const userID = "6860ced9c56f9517a05c8061"
-    dispatch(fetchContent(userID));
+    const userID = localStorage.getItem("userID")
+    if(userID){
+      dispatch(fetchContent(userID));
+    }
   }, [dispatch]);
 
   if(isLoading){

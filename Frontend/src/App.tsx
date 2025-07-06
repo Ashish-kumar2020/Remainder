@@ -21,7 +21,7 @@ function App() {
       element: <HomePage/>,
       children: [
         {
-          path: "homecontent",
+          index: true,
           element: <HomeContent/>
         }
       ]

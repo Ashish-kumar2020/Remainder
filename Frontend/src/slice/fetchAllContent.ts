@@ -3,8 +3,7 @@ import axios from "axios";
 
 
 export const fetchContent = createAsyncThunk(
-    "fetchContent", async (userID:string)=>{
-       
+    "fetchContent", async (userID:string)=>{ 
         const response = await axios.get(
             `${import.meta.env.VITE_API_URL_FETCH_USER_CONTENT}/${userID}`
           );

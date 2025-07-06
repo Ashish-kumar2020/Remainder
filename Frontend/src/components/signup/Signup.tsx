@@ -26,6 +26,7 @@ const Signup = () => {
         lastName: ""
     })
 
+    const navigate = useNavigate()
     const signupMutation = useMutation<AxiosResponse<ApiResponse>, unknown, SignUpPayload>({
         mutationFn: (userData) =>{
             return axios.post(import.meta.env.VITE_API_URL_USER_SIGNUP, userData)
@@ -38,6 +39,7 @@ const Signup = () => {
                     firstName: "",
                     lastName: ""
                 })
+                navigate("/signin")
             }
         },
         onError: (err)=>{

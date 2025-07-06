@@ -9,6 +9,8 @@ import type { AxiosResponse } from "axios";
 interface ApiResponse {
   status: number;
   message?: string;
+  userID: string;
+  token: string;
 }
 interface SignInPayload{
     userName: string,
@@ -39,7 +41,9 @@ function Signin() {
           password: "",
         });
       }
-      navigate("/userHomePage");
+     localStorage.setItem("userID",res.data.userID)
+
+      navigate("/homepage");
     },
   });
 

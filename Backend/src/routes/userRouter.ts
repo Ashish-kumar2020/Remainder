@@ -89,7 +89,8 @@ userRouter.post("/signin", async(req: Request, res: Response): Promise<any> =>{
       return res.status(200).json({
         message: "Login Successfully",
         status: 200,
-        token
+        token,
+        userID: findUser.userId
       })
     }
 
