@@ -21,6 +21,7 @@ const contentSchema = new Schema<IContent>({
   link: { type: String, required: true },
   type: { type: String, enum: contentTypes, required: true },
   title: { type: String, required: true },
+  description: {type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });

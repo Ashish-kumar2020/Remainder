@@ -109,8 +109,8 @@ userRouter.post("/signin", async(req: Request, res: Response): Promise<any> =>{
 // Post the content
 userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>{
   try {
-    const {link,type,title,tags,userId} = req.body;
-    if(!link || !type || !title || !tags ||!userId){
+    const {link,type,title,tags,userId,description} = req.body;
+    if(!link || !type || !title || !tags ||!userId || !description){
       return res.status(400).json({
         message: "All Fields Are Mandatory",
         status: 400
@@ -130,7 +130,8 @@ userRouter.post("/postcontent", async(req:Request, res:Response): Promise<any>=>
       type,
       title,
       tags,
-      userId
+      userId,
+      description
     })
     const userContent = await createdContent.populate([
       {path: "userId", select:"userName"},

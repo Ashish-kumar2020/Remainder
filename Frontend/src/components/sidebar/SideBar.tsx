@@ -5,8 +5,8 @@ const SideBar = () => {
   const items = ["Home", "Youtube", "Image", "Tweet"];
 
   return (
-    <div className="bg-white dark:bg-gray-900 w-[20%] shadow-lg h-[100vh] p-[22px]">
-      <ul className="h-[80vh] mt-[63px]">
+    <div className="bg-white dark:bg-gray-900 w-[20%]  p-[22px]">
+      <ul className="mt-[63px]">
         {items.map((item) => (
           <li
             key={item}

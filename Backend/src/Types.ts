@@ -18,7 +18,8 @@ export interface IContent{
     type: 'image'| 'video'|'article'|'audio',
     title: string,
     tags: mongoose.Types.ObjectId,
-    userId: mongoose.Types.ObjectId
+    userId: mongoose.Types.ObjectId,
+    description: string
 }
 
 export interface ILink{
