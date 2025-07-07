@@ -38,7 +38,6 @@ const YoutubeCard: React.FC<YoutubeCardProps> = ({ item }) => {
       console.error("Failed to copy text: ", err);
     }
   };
-  console.log("Youtube COmponent")
 
 
   const youtubeURL = item.link;

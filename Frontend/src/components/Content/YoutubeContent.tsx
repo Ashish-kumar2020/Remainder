@@ -39,7 +39,6 @@ const YoutubeContent = ()=>{
     if(isError){
       return <p>There is some error while fetching the content</p>
     }
-    console.log("Parent Youtube Conetnt")
     return(
       <div className="bg-white dark:bg-gray-900 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 mt-[70px]">
       {youtubeData.map((item) => (

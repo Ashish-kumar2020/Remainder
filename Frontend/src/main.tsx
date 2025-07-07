@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import {store} from "./store.ts";
 import { Provider as ReduxProvider } from "react-redux";
+import 'flowbite';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(

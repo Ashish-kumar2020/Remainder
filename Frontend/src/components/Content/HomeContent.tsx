@@ -5,7 +5,6 @@ import type { AppDispatch ,RootState} from "../../store";
 import { useSelector } from "react-redux";
 import ContentCard from "../Pages/ContentCard";
 
-
 const HomeContent = () => {
   const [imageContent, setImageContent] = useState<ContentItem[]>([]);
 
