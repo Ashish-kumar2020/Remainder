@@ -6,6 +6,7 @@ import Signup from './components/signup/Signup'
 import HomeContent from './components/Content/HomeContent'
 import YoutubeContent from './components/Content/YoutubeContent'
 import TweetContent from './components/Content/TweetContent'
+import About from './components/Pages/About'
 
 function App() {
   
@@ -33,6 +34,9 @@ function App() {
         {
           path:"tweet",
           element: <TweetContent/>
+        },{
+          path: "about",
+          element: <About/>
         }
       ]
     }
