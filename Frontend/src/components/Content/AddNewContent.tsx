@@ -47,8 +47,7 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
   }, [dispatch]);
 
   useEffect(() => {
-    
-    console.log("Fetched Tags:", data?.fetchAllTags);
+
     if (data) {
       setTagData(data?.fetchAllTags)
     }

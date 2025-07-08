@@ -13,16 +13,6 @@ const HomeContent = () => {
   const { data, isLoading, isError } = useSelector(
     (state: RootState) => state.fetchContent
   );
-
-
-
-    
-  
-  useEffect(() => {
-    if (data) {
-      console.log("Fetched Tags:", data);
-    }
-  }, [data]);
   useEffect(() => {
     const userID = localStorage.getItem("userID")
     if(userID){
