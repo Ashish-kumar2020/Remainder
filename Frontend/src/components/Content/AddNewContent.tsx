@@ -5,6 +5,7 @@ import type { FetchTagState } from "../../slice/fetchAllTags";
 import fetchAllTagsReducer, { fetchAllTags } from "../../slice/fetchAllTags";
 import type { AppDispatch } from "../../store";
 import { postUserContent } from "../../slice/postContent";
+import { createTagForContent } from "../../slice/createTag";
 
 interface AddNewContentProps {
   isOpen: boolean;
@@ -28,6 +29,7 @@ interface TagContent{
 
 const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [title,setTitle] = useState("");
   const [tagData, setTagData] = useState<TagContent[]>([])
   const [contentData, setContentData] = useState<ContentBody>({
     link: "",
@@ -70,6 +72,9 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
   }
 
       
+  const createNewTag = ()=>{
+    dispatch(createTagForContent({title: title}))
+  }
   if(isLoading){
     return <p>Content is beign loading...Please wait</p>
   }
@@ -250,11 +255,14 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
                 <div className="px-4 py-3 border-t border-gray-700 flex gap-2">
                   <input
                     type="text"
+                    value={title}
+                    onChange={(e)=>setTitle(e.target.value)}
                     placeholder="Create New"
                     className="flex-1 bg-gray-700 text-white text-sm rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
                     type="button"
+                    onClick={createNewTag}
                     className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-sm font-medium px-4 py-2 rounded-lg transition"
                   >
                     Add Tag
