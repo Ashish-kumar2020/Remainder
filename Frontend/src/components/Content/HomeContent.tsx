@@ -5,6 +5,7 @@ import type { AppDispatch ,RootState} from "../../store";
 import { useSelector } from "react-redux";
 import ContentCard from "../Pages/ContentCard";
 
+
 const HomeContent = () => {
   const [imageContent, setImageContent] = useState<ContentItem[]>([]);
 
@@ -12,6 +13,16 @@ const HomeContent = () => {
   const { data, isLoading, isError } = useSelector(
     (state: RootState) => state.fetchContent
   );
+
+
+
+    
+  
+  useEffect(() => {
+    if (data) {
+      console.log("Fetched Tags:", data);
+    }
+  }, [data]);
   useEffect(() => {
     const userID = localStorage.getItem("userID")
     if(userID){

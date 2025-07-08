@@ -28,7 +28,7 @@ export interface Tag {
     status: number;
     searchUser: ContentItem[];
   }
-  // ✅ Define slice state type
+
 interface FetchContentState {
     isLoading: boolean;
     isError: boolean;

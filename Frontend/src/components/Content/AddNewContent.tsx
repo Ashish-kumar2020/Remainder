@@ -1,12 +1,74 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store";
+import type { FetchTagState } from "../../slice/fetchAllTags";
+import fetchAllTagsReducer, { fetchAllTags } from "../../slice/fetchAllTags";
+import type { AppDispatch } from "../../store";
 
 interface AddNewContentProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface ContentBody {
+  link: string;
+  type: string;
+  title: string;
+  description: string;
+  tags: string;
+  userId: string;
+}
+
+interface TagContent{
+  tagId: string;
+  title: string;
+  _id: string;
+}
+
 const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [tagData, setTagData] = useState<TagContent[]>([])
+  const [contentData, setContentData] = useState<ContentBody>({
+    link: "",
+    type: "",
+    title: "",
+    description: "",
+    tags: "",
+    userId: "",
+  });
+
+  const dispatch = useDispatch<AppDispatch>()
+  const { data, isLoading, isError } = useSelector(
+    (state: RootState) => state.fetchTagReducer
+  ) as FetchTagState;
+  useEffect(() => {
+    dispatch(fetchAllTags());
+  }, [dispatch]);
+
+  useEffect(() => {
+    
+    console.log("Fetched Tags:", data?.fetchAllTags);
+    if (data) {
+      setTagData(data?.fetchAllTags)
+    }
+  }, [data]);
+
+  const submitData = (e: any)=>{
+    e.preventDefault();
+    if(contentData.tags === "youtube"){
+      contentData.tags = ""
+    }
+    console.log(contentData)
+  }
+
+      
+  if(isLoading){
+    return <p>Content is beign loading...Please wait</p>
+  }
+
+  if(isError){
+    return <p>There is some error while fetching the content</p>
+  }
 
   return (
     <>
@@ -56,7 +118,7 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
           </svg>
         </button>
 
-        <form className="mb-6">
+        <form className="mb-6" >
           <div className="mb-6">
             <label
               htmlFor="link"
@@ -67,6 +129,10 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
             <input
               type="text"
               id="link"
+              value={contentData.link}
+              onChange={(e) =>
+                setContentData({ ...contentData, link: e.target.value })
+              }
               placeholder="link of video image or any other thing"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               required
@@ -83,6 +149,10 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
             <input
               type="text"
               id="title"
+              value={contentData.title}
+              onChange={(e) =>
+                setContentData({ ...contentData, title: e.target.value })
+              }
               placeholder="Title of content"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               required
@@ -99,11 +169,34 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
             <textarea
               id="description"
               rows={4}
+              value={contentData.description}
+              onChange={(e) =>
+                setContentData({ ...contentData, description: e.target.value })
+              }
               placeholder="Your description..."
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             ></textarea>
           </div>
-
+          {/* Content Type */}
+          <div className="mb-6">
+            <label
+              htmlFor="link"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Type Of Content
+            </label>
+            <input
+              type="text"
+              id="link"
+              value={contentData.type}
+              onChange={(e) =>
+                setContentData({ ...contentData, type: e.target.value })
+              }
+              placeholder="Enter - youtube/image/tweet"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              required
+            />
+          </div>
           {/* Dropdown Toggle */}
           <div className="relative mb-6">
             <button
@@ -111,7 +204,7 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
               onClick={() => setShowDropdown((prev) => !prev)}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 flex justify-between items-center w-full dark:bg-blue-600 dark:hover:bg-blue-700"
             >
-              Dropdown Divider
+              {tagData.find(tag => tag.tagId === contentData.tags)?.title || "Select Tag"}
               <svg
                 className="w-3 h-3 ml-2"
                 fill="none"
@@ -131,30 +224,19 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
             {showDropdown && (
               <div className="absolute mt-2 w-full bg-gray-800 text-white rounded-xl shadow-lg z-50 ring-1 ring-black/10 animate-fade-in">
                 <ul className="text-sm divide-y divide-gray-700">
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-5 py-3 hover:bg-gray-700 transition"
+                  {tagData.map((tag:TagContent)=>(
+                    <li 
+                      key={tag.tagId}
+                      value={tag.title}
+                      className="block px-5 py-3 hover:bg-gray-700 transition cursor-pointer"
+                      onClick={()=>{
+                        setContentData({...contentData, tags: tag.tagId});
+                        setShowDropdown(false);
+                      }}
                     >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-5 py-3 hover:bg-gray-700 transition"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-5 py-3 hover:bg-gray-700 transition"
-                    >
-                      Earnings
-                    </a>
-                  </li>
+                      {tag.title}
+                    </li>
+                  ))}
                 </ul>
 
                 <div className="px-4 py-3 border-t border-gray-700 flex gap-2">
@@ -176,6 +258,7 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
 
           <button
             type="submit"
+            onClick={submitData}
             className="mt-6 text-white bg-blue-700 hover:bg-blue-800 w-full focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             Add Content
