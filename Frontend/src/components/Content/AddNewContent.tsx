@@ -4,6 +4,7 @@ import type { RootState } from "../../store";
 import type { FetchTagState } from "../../slice/fetchAllTags";
 import fetchAllTagsReducer, { fetchAllTags } from "../../slice/fetchAllTags";
 import type { AppDispatch } from "../../store";
+import { postUserContent } from "../../slice/postContent";
 
 interface AddNewContentProps {
   isOpen: boolean;
@@ -53,11 +54,19 @@ const AddNewContent = ({ isOpen, onClose }: AddNewContentProps) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    const userIdFromStorage = localStorage.getItem("userID"); 
+    if (userIdFromStorage) {
+      setContentData((prev) => ({
+        ...prev,
+        userId: userIdFromStorage,
+      }));
+    }
+  }, []);
   const submitData = (e: any)=>{
     e.preventDefault();
-    if(contentData.tags === "youtube"){
-      contentData.tags = ""
-    }
+   
+    dispatch(postUserContent(contentData));
     console.log(contentData)
   }
 

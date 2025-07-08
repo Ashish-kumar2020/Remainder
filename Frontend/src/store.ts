@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import fetchAllContent from "./slice/fetchAllContent";
 import  fetchAllTagsReducer from "./slice/fetchAllTags";
-
+import postContentReducer from "./slice/postContent";
 
 export const store = configureStore({
     reducer: {
         fetchContent : fetchAllContent,
-        fetchTagReducer : fetchAllTagsReducer
+        fetchTagReducer : fetchAllTagsReducer,
+        postUserContentReducer: postContentReducer
     }
 })
 
