@@ -7,6 +7,8 @@ import HomeContent from './components/Content/HomeContent'
 import YoutubeContent from './components/Content/YoutubeContent'
 import TweetContent from './components/Content/TweetContent'
 import About from './components/Pages/About'
+import Service from './components/Pages/Service'
+import Contact from './components/Pages/Contact'
 
 function App() {
   
@@ -34,9 +36,18 @@ function App() {
         {
           path:"tweet",
           element: <TweetContent/>
-        },{
+        },
+        {
           path: "about",
           element: <About/>
+        },
+        {
+          path: "services",
+          element: <Service/>
+        },
+        {
+          path: "contact",
+          element: <Contact/>
         }
       ]
     }
